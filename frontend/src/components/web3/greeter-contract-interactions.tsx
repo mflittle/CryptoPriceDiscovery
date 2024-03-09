@@ -1,5 +1,21 @@
 'use client'
 
+//New Code
+import axios, {isCancel, AxiosError} from 'axios';
+var responseBody: { data: {
+  price_change_7d: string;
+  price_change_1m: string;
+  name: string; price?: any; logo?: any; 
+}; };
+var logo: string;
+var price: string;
+var name: string;
+var priceChange7D: string;
+var priceChange1M: string;
+var coin = 'DOT';
+const options = { method: 'GET' };
+//End New Code
+
 import { FC, useEffect, useState } from 'react'
 
 import { ContractIds } from '@/deployments/deployments'
@@ -21,6 +37,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { contractTxWithToast } from '@/utils/contract-tx-with-toast'
+import { FileOutput } from 'lucide-react';
 
 const formSchema = z.object({
   newMessage: z.string().min(1).max(90),
@@ -45,13 +62,60 @@ export const GreeterContractInteractions: FC = () => {
     setFetchIsLoading(true)
     try {
       const result = await contractQuery(api, '', contract, 'greet')
-      const { output, isError, decodedOutput } = decodeOutput(result, contract, 'greet')
+      let { output, isError, decodedOutput } = decodeOutput(result, contract, 'greet')
       if (isError) throw new Error(decodedOutput)
-      setGreeterMessage(output)
+      //3/2 Code
+      coin = output
+      //New Code
+      
+      const getData = async() => {
+        let location = ('https://api.mobula.io/api/1/market/data?symbol='+ coin)
+        try {
+          const {data} = await axios.get(location, options) 
+          responseBody = data;
+        return data;
+      } catch(error) {toast.error('Token ticker is not valid. Try again…');
+          responseBody.data.price = 'N/A';
+          responseBody.data.logo = null;
+          responseBody.data.name = 'Unknown Token';
+          responseBody.data.price_change_1m = '';
+          responseBody.data.price_change_7d = '';
+        return null}}
+                
+      (async () => {
+        await getData();
+        const keys = Object.keys(responseBody.data)
+        price = responseBody.data.price;
+        console.log("price: "+ price)
+        logo = responseBody.data.logo
+        console.log("logo: " + logo)
+        name = responseBody.data.name
+        priceChange7D = Number(responseBody.data.price_change_7d).toFixed(2)
+        priceChange1M = Number(responseBody.data.price_change_1m).toFixed(2)
+    
+        //output = `${name} (${output}): ${price}\n7-Day Price Chg: ${priceChange7D}`;
+
+        output = name + " ("+ output + "): "+ price 
+
+        console.log ("output: " + output)
+        setGreeterMessage(output)  //New position
+        console.log("7D: "+ priceChange7D)
+        console.log("1M: "+ priceChange1M)
+        if ((Number(priceChange7D) < 0.9 * Number(priceChange1M)) || (Number(priceChange1M) - Number(priceChange7D) > 5)) {
+          toast.error('Declining Trend: ' + '\n' + 'Seven-day price change: ' + priceChange7D + '\n' +
+          'One-month price change: ' + priceChange1M)
+        }
+      })();
+    //End New Code
+      //setGreeterMessage(output) Originally not commented
 
       // Alternatively: Fetch it with typed contract instance
       const typedResult = await typedContract.query.greet()
       console.log('Result from typed contract: ', typedResult.value)
+      //New Code
+      let temp_var = (JSON.parse(JSON.stringify(typedResult.value)))
+      coin = temp_var["ok"]
+    
     } catch (e) {
       console.error(e)
       toast.error('Error while fetching greeting. Try again…')
@@ -88,15 +152,18 @@ export const GreeterContractInteractions: FC = () => {
   return (
     <>
       <div className="flex max-w-[22rem] grow flex-col gap-4">
-        <h2 className="text-center font-mono text-gray-400">Greeter Smart Contract</h2>
+        <h2 className="text-center font-mono text-gray-400">Token Price Discovery</h2>
 
         <Form {...form}>
           {/* Fetched Greeting */}
-          <Card>
+          <Card style={{ backgroundImage: `url(${logo})`,
+              backgroundSize: '16% 48%',
+              backgroundPosition: 'right',
+              backgroundRepeat: 'no-repeat'}}>
             <CardContent className="pt-6">
               <FormItem>
-                <FormLabel className="text-base">Fetched Greeting</FormLabel>
-                <FormControl>
+                <FormLabel className="text-base">Current Price</FormLabel>
+                <FormControl style={{ width: '270px', height: '50px' }}> 
                   <Input
                     placeholder={fetchIsLoading || !contract ? 'Loading…' : greeterMessage}
                     disabled={true}
@@ -114,7 +181,7 @@ export const GreeterContractInteractions: FC = () => {
                 className="flex flex-col justify-end gap-2"
               >
                 <FormItem>
-                  <FormLabel className="text-base">Update Greeting</FormLabel>
+                  <FormLabel className="text-base">Enter Token Symbol:</FormLabel>
                   <FormControl>
                     <div className="flex gap-2">
                       <Input disabled={form.formState.isSubmitting} {...register('newMessage')} />
