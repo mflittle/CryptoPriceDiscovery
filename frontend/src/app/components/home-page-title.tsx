@@ -4,7 +4,8 @@ import { AnchorHTMLAttributes, FC } from 'react'
 
 import githubIcon from 'public/icons/github-button.svg'
 import telegramIcon from 'public/icons/telegram-button.svg'
-import vercelIcon from 'public/icons/vercel-button.svg'
+//import vercelIcon from 'public/icons/vercel-button.svg'
+import vercelIcon from 'public/images/mobula-logo.png'
 import inkathonLogo from 'public/images/inkathon-logo.png'
 
 import { cn } from '@/utils/cn'
@@ -28,10 +29,10 @@ const StyledIconLink: React.FC<StyledIconLinkProps> = ({ className, children, ..
 
 export const HomePageTitle: FC = () => {
   const title = 'ink!athon'
-  const desc = 'Full-Stack DApp Boilerplate for ink! Smart Contracts'
-  const githubHref = 'https://github.com/scio-labs/inkathon'
-  const deployHref = 'https://github.com/scio-labs/inkathon#deployment-'
-  const telegramHref = 'https://t.me/inkathon'
+  const desc = 'ink! Supported Price Discovery for On-Chain Tokens'
+  const githubHref = 'https://github.com/mflittle/CryptoPriceDiscovery'
+  const deployHref = 'https://mobula.io/home'
+  const telegramHref = 'https://t.me/mflittle'
 
   return (
     <>
@@ -52,20 +53,13 @@ export const HomePageTitle: FC = () => {
         <p className="mb-8 text-xs text-gray-600">
           Built by{' '}
           <a
-            href="https://zoma.dev"
+            href="https://www.linkedin.com/in/michaelflittle/"
             target="_blank"
             className="font-semibold text-gray-600 hover:text-gray-300"
           >
-            Dennis Zoma
+            Michael Little
           </a>{' '}
-          &{' '}
-          <a
-            href="https://scio.xyz"
-            target="_blank"
-            className="font-semibold text-gray-600 hover:text-gray-300"
-          >
-            Scio Labs
-          </a>
+
           . Supported by{' '}
           <a
             href="https://alephzero.org"
@@ -83,14 +77,16 @@ export const HomePageTitle: FC = () => {
             <Image src={githubIcon} priority height={32} alt="Github Repository" />
           </StyledIconLink>
           <StyledIconLink href={deployHref} target="_blank">
-            <Image src={vercelIcon} priority height={32} alt="Deploy with Vercel" />
+            <Image src={vercelIcon} priority height={32} alt="Mobula Resources" />
           </StyledIconLink>
           <StyledIconLink href={telegramHref} target="_blank">
             <Image src={telegramIcon} priority height={32} alt="Telegram Group" />
           </StyledIconLink>
         </div>
 
-        <div className="my-14 h-[1px] w-[5rem] max-w-full bg-gray-800" />
+        <div> <img className="my-5 h-[1px] w-[1px] max-w-full bg-gray-600" 
+        id = "tokenImage"/>
+          </div>
       </div>
     </>
   )
