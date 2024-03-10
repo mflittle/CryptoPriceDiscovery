@@ -1,4 +1,4 @@
-# ink!athon Boilerplate
+# CryptoPrice Discovery (based on ink!athon Boilerplate)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Built with ink!](https://raw.githubusercontent.com/paritytech/ink/master/.images/badge.svg)](https://use.ink)
@@ -6,20 +6,9 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-000000?logo=typescript&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)
 
-This is a full-stack dApp boilerplate for ink! smart contracts with an integrated front-end. It can be used to quickly start developing your hackathon idea or to scaffold a production-ready Web3 application.
+This project leverages ink!athon's Boilerplate smart contract framework and integrates it with Mobula's [https://mobula.io] Market Data API so that it can be used for token price discovery and price trend analysis.  Trend analysis is based on significant variations between the 7-day and 1-month price changes. The UI also returns the token's logo and informs appropriately when an invalid ticker is searched.  Both of these features are designed to help the user select the appropriate ticker of interest.
 
-The project is part of a [Scio Labs](https://scio.xyz) initiative to improve the developer experience in the ink! ecosystem and a proud member of the [Aleph Zero EFP](https://alephzero.org/ecosystem-funding-program). 💜
-
-Other projects include:
-
-- `create-ink-app` CLI (_Coming soon_)
-- [`ink!athon`](https://github.com/scio-labs/inkathon) Boilerplate
-- [`useInkathon`](https://github.com/scio-labs/use-inkathon) Hooks & Utility Library
-- [`zink!`](https://github.com/scio-labs/zink) Smart Contract Macros
-
-**Join the discussion in our [Telegram Group](https://t.me/inkathon)** 💬
-
-**If you want to contribute, please read our [Contributor Guidelines](https://github.com/scio-labs/inkathon/blob/main/CONTRIBUTING.md)** 🙏
+The contract runs on a local Substrate node and deployment information is displayed on the UI.  The next iteration of this project will replace this deployment information with trading pair information for the searched ticker so that the user can identify additional potential trading opportunities.
 
 ---
 
